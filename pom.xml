@@ -67,12 +67,12 @@
             <version>3.14.0</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>io.grpc</groupId>-->
-            <!--<artifactId>protoc-gen-grpc-java</artifactId>-->
-            <!--<version>${grpc.version}</version>-->
-            <!--<type>pom</type>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>protoc-gen-grpc-java</artifactId>
+            <version>${grpc.version}</version>
+            <type>pom</type>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
