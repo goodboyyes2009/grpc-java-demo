@@ -74,11 +74,11 @@ public class HedgingHelloWorldServer {
             int delay = 0;
 
             if (random < 1) {
-                delay = 10_000;
+                delay = 10000;
             } else if (random < 5) {
-                delay = 5_000;
+                delay = 5000;
             } else if (random < 10) {
-                delay = 2_000;
+                delay = 2000;
             }
 
             if (delay > 0) {
