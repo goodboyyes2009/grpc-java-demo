@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sunshine.grpc.example.productinfo";
+option java_outer_classname = "ProductInfoProto";
+
+package productinfo;
+
+service ProductInfo { // 定义服务
+    rpc addProduct(Product) returns (ProductId); // 添加
+    rpc getProduct(ProductId) returns (Product); // 获取
+}
+
+// Product
+message Product {
+    string id = 1;
+    string name = 2;
+    string desc = 3;
+    float price = 4;
+}
+
+// ProductId
+message ProductId{
+    string value = 1; // productId
+}
