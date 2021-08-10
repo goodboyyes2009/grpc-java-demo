@@ -55,5 +55,6 @@ public class ProductInfoClient {
             Product product = client.getProduct(id);
             logger.info("get Product: {}", product.toString());
         });
+        client.channel.shutdown();
     }
 }
