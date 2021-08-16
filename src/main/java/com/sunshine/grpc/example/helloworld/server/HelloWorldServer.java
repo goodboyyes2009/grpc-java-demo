@@ -22,9 +22,7 @@ public class HelloWorldServer {
 
     private Server server;
 
-    private void start() throws Exception {
-        // 定义port
-        int port = 50051;
+    private void start(int port) throws Exception {
 
         server = ServerBuilder.forPort(port)
                               .addService(new GreeterImpl())
@@ -77,7 +75,8 @@ public class HelloWorldServer {
 
     public static void main(String[] args) throws Exception {
         final HelloWorldServer server = new HelloWorldServer();
-        server.start();
+        final int port = 50051;
+        server.start(port);
         server.blockUntilShutdown();
     }
 }
