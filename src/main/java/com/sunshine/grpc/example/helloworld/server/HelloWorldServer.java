@@ -27,7 +27,7 @@ public class HelloWorldServer {
         server = ServerBuilder.forPort(port)
                               .addService(new GreeterImpl(name))
                               .build().start();
-        logger.info("Server started, listening on " + port);
+        logger.info(name + " started, listening on " + port);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
