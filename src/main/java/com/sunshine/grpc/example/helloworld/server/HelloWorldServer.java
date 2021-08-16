@@ -9,6 +9,8 @@ import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,7 +27,7 @@ public class HelloWorldServer {
     private void start(int port, String name) throws Exception {
 
         server = ServerBuilder.forPort(port)
-                              .addService(new GreeterImpl(name))
+                              .addService(new GreeterImpl())
                               .build().start();
         logger.info(name + " started, listening on " + port);
 
@@ -64,16 +66,11 @@ public class HelloWorldServer {
 
     // 定义一个GreeterImpl
     public static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
-        private final String name;
-
-        public GreeterImpl(String name) {
-            this.name = name;
-        }
 
         @Override
         public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
             HelloReply helloReply = HelloReply.newBuilder()
-                                              .setMessage("Hello " + request.getName() + ", process by " + this.name)
+                                              .setMessage("Hello " + request.getName())
                                               .build();
             responseObserver.onNext(helloReply);
             responseObserver.onCompleted();
@@ -83,9 +80,20 @@ public class HelloWorldServer {
 
     public static void main(String[] args) throws Exception {
         final HelloWorldServer server = new HelloWorldServer();
-        final int port = 50051;
-        String name = "server";
-        server.start(port, name);
-        server.blockUntilShutdown();
+
+        final int serverInts = 3;
+        ExecutorService service = Executors.newFixedThreadPool(serverInts);
+        for (int j = 0; j < serverInts; j++) {
+            String name = "localhost" + "_" + j;
+            int port = 50051 + j;
+            service.submit(() -> {
+                try {
+                    server.start(port, name);
+                    server.blockUntilShutdown();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }
