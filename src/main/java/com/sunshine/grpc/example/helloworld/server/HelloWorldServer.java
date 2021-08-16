@@ -22,10 +22,10 @@ public class HelloWorldServer {
 
     private Server server;
 
-    private void start(int port) throws Exception {
+    private void start(int port, String name) throws Exception {
 
         server = ServerBuilder.forPort(port)
-                              .addService(new GreeterImpl())
+                              .addService(new GreeterImpl(name))
                               .build().start();
         logger.info("Server started, listening on " + port);
 
@@ -64,9 +64,17 @@ public class HelloWorldServer {
 
     // 定义一个GreeterImpl
     public static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+        private final String name;
+
+        public GreeterImpl(String name) {
+            this.name = name;
+        }
+
         @Override
         public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-            HelloReply helloReply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
+            HelloReply helloReply = HelloReply.newBuilder()
+                                              .setMessage("Hello " + request.getName() + ", process by " + this.name)
+                                              .build();
             responseObserver.onNext(helloReply);
             responseObserver.onCompleted();
         }
@@ -76,7 +84,8 @@ public class HelloWorldServer {
     public static void main(String[] args) throws Exception {
         final HelloWorldServer server = new HelloWorldServer();
         final int port = 50051;
-        server.start(port);
+        String name = "server";
+        server.start(port, name);
         server.blockUntilShutdown();
     }
 }
